@@ -53,7 +53,7 @@ const configureMulter = () => {
   }).fields([
     { name: "videos", maxCount: 5 },
     { name: "documents", maxCount: 5 },
-    { name: "images", maxCount: 5 },
+    { name: "images", maxCount: 10 },
   ]);
 
   return upload;
