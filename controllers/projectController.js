@@ -11,7 +11,7 @@ export const createProject = async (req, res) => {
     // Upload image to Cloudinary
     const result = await cloudinary.uploader.upload(req.files.images[0].path);
     // Retrieve data from the request body
-    const { title, description, posterName, location, contact, itemCondition } =
+    const { title, description, posterName, location, contact, itemCondition,category, beneficiary } =
       req.body;
     const images = result.secure_url; // Get the secure image URL from Cloudinary
 
@@ -24,6 +24,8 @@ export const createProject = async (req, res) => {
       location,
       contact,
       itemCondition,
+      category,
+      beneficiary
     });
 
     res.status(200).json(newProjectPost);
@@ -76,6 +78,8 @@ export const getAllProjects = async (req, res) => {
       project.location = req.body.location || project.location;
       project.contact = req.body.contact || project.contact;
       project.itemCondition = req.body.itemCondition || project.itemCondition;
+      project.category = req.body.category || project.category;
+      project.beneficiary = req.body.beneficiary || project.beneficiary;
       project.images = updatedImage;
   
       const updatedProject = await project.save();

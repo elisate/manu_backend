@@ -14,10 +14,6 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },  
-    beneficiary:{
-      type:String,
-      required:false
-    },
     posterName:{
         type:String,
         required:true
@@ -30,18 +26,10 @@ const projectSchema = mongoose.Schema(
         type:String,
         required:true
     },
-    category:{
+    itemCondition:{
         type:String,
         required:true
-    },
-    itemCondition:{
-      type:String,
-      required:true
-  },
-  beneficiary:{
-    type:String,
-    required:false
-}
+    }
   },
   {
     timestamps: true,
