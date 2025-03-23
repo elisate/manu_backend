@@ -158,3 +158,27 @@ export const updateApprovalStatus = async (req, res) => {
   }
 };
 
+export const rejectProject = async (req, res) => {
+  const { id } = req.body;  // Get the project id from the request body
+
+  try {
+    // Find the project by ID and update its approval status to "Rejected"
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { approvalStatus: "Rejected" },  // Set the status to "Rejected"
+      { new: true }  // Return the updated project document
+    );
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Send back the updated project with status "Rejected"
+    res.status(200).json({
+      message: "Project rejected successfully",
+      project,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error rejecting project", error });
+  }
+};
