@@ -1,8 +1,20 @@
 import mongoose from "mongoose";
-
-const projectSchema = mongoose.Schema(
+const marketSchema = mongoose.Schema(
   {
-    title: {
+    itemName:{
+      type: String,
+      required: true,
+    },
+    itemPrice:{
+      type: String,
+      required: true,
+    },
+    itemDeliveryStatus:{
+      type: String,
+      required: true,
+      enum:["Delivery", "Installation"]
+    },
+    companyOwner:{
       type: String,
       required: true,
     },
@@ -16,7 +28,7 @@ const projectSchema = mongoose.Schema(
     },  
     posterName:{
         type:String,
-        required:true
+        required:false
     },
     location:{
         type:String,
@@ -36,5 +48,5 @@ const projectSchema = mongoose.Schema(
   }
 );
 
-const   Project = mongoose.model("project", projectSchema);
-export default Project;
+const   Market = mongoose.model("markets", marketSchema);
+export default Market;
