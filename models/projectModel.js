@@ -41,8 +41,15 @@ const projectSchema = mongoose.Schema(
   beneficiary:{
     type:String,
     required:false
-}
+},
+approvalStatus: {
+  type: String,
+  enum: ["Pending", "Approved", "Rejected"],  // Ensure these are valid statuses
+  default: "Pending",
+},
+
   },
+  
   {
     timestamps: true,
   }
