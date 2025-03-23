@@ -12,7 +12,7 @@ const marketSchema = mongoose.Schema(
     itemDeliveryStatus:{
       type: String,
       required: true,
-      enum:["Delivery", "Installation"]
+     
     },
     companyOwner:{
       type: String,
