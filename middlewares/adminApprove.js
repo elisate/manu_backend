@@ -1,14 +1,18 @@
 import Project from "../models/projectModel.js";
-
-export const checkApproval = async (req, res, next) => {
+export const filterApprovedProjects = async (req, res, next) => {
   try {
-    // Check if the request is for fetching projects
-    if (req.method === "GET" && req.baseUrl.includes("/projects")) {
-      const approvedProjects = await Project.find({ approvalStatus: "Approved" });
-      req.approvedProjects = approvedProjects;
-    }
+    // Fetch the projects with "Approved" status
+    const approvedProjects = await Project.find({
+      approvalStatus: "Approved",
+    });
+
+    // Attach the filtered projects to the request object (optional)
+    req.filteredProjects = approvedProjects;
+
+  
     next();
   } catch (error) {
-    res.status(500).json({ message: "Error filtering approved projects" });
+    // Handle any errors
+    res.status(500).json({ message: error.message });
   }
 };

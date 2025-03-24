@@ -1,5 +1,6 @@
 import Project from "../models/projectModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import { filterApprovedProjects } from "../middlewares/adminApprove.js";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -116,13 +117,21 @@ export const deleteProject = async (req, res) => {
 //----------------- SPECIAL CONTROLLERS-------------------------------------------------------------------
 
 // Fetch all approved projects for user landing page
-export const getApprovedProjects = (req, res) => {
+
+
+export const getAllProjectsUser = async (req, res) => {
   try {
-    res.status(200).json(req.approvedProjects); // Use middleware result
+    const projects = req.filteredProjects;
+    // Send the data wrapped in an object like { data: projects }
+    res.status(200).json({ data: projects });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching approved projects" });
+    res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
 // Update approval status by admin
 export const updateApprovalStatus = async (req, res) => {
   const { id, approvalStatus } = req.body; // Make sure you are passing `approvalStatus`

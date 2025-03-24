@@ -5,10 +5,11 @@ import {
   getProjectById,
   updateProject,
   deleteProject,
-  getApprovedProjects,updateApprovalStatus,rejectProject
+updateApprovalStatus,rejectProject,
+  getAllProjectsUser
 } from "../controllers/projectController.js";
 import configureMulter from "../utils/multer.js";
-import { checkApproval } from "../middlewares/adminApprove.js";
+import {filterApprovedProjects} from "../middlewares/adminApprove.js";
 
 const projectRouter = express();
 const upload = configureMulter();
@@ -18,7 +19,7 @@ projectRouter.get("/getProjectById/:id", getProjectById);
 projectRouter.put("/updateProject/:id", upload,updateProject);
 projectRouter.delete("/deleteProject/:id", deleteProject);
 // ------special Routes -----------------
-projectRouter.get("/ApprovedProjects",checkApproval,getApprovedProjects)
+projectRouter.get("/ApprovedProjects",filterApprovedProjects,getAllProjectsUser)
 projectRouter.put("/updateApprovalStatus",updateApprovalStatus)
 projectRouter.put('/rejectProject', rejectProject);
 

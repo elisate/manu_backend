@@ -44,8 +44,8 @@ const projectSchema = mongoose.Schema(
 },
 approvalStatus: {
   type: String,
-  enum: ["Pending", "Approved", "Rejected"],  // Ensure these are valid statuses
-  default: "Pending",
+  enum: ["Pending", "Approved", "Rejected"], // Ensure these are valid statuses
+      default: "Pending",
 },
 
   },
