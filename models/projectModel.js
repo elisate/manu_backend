@@ -42,6 +42,11 @@ const projectSchema = mongoose.Schema(
     type:String,
     required:false
 },
+userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",  // Reference to the User model
+  required: false,
+},
 approvalStatus: {
   type: String,
   enum: ["Pending", "Approved", "Rejected"], // Ensure these are valid statuses

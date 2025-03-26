@@ -191,3 +191,20 @@ export const rejectProject = async (req, res) => {
     res.status(500).json({ message: "Error rejecting project", error });
   }
 };
+
+export const getProjectsByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    // Find projects where the userId matches and populate the user details
+    const projects = await Project.find({ userId: userId }).populate("userId", "firstname lastname email role");
+
+    if (!projects.length) {
+      return res.status(404).json({ message: "No projects found for this user" });
+    }
+
+    res.status(200).json({ data: projects });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

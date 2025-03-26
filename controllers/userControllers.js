@@ -2,22 +2,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import dotenv from "dotenv";
-import {
-generateAccessToken
-  
-} from "../utils/generateUserTokens.js"
+import { generateAccessToken } from "../utils/generateUserTokens.js";
 dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const {
-      firstname,
-      lastname,
-      email,
-      gender,
-      password,
-      role,
-    } = req.body;
+    const { firstname, lastname, email, gender, password, role } = req.body;
 
     // Check if the email already exists
     const existingUser = await User.findOne({ email });
@@ -38,7 +28,6 @@ export const register = async (req, res) => {
     });
 
     user.tokens.accessToken = generateAccessToken(user);
-   
 
     await user.save();
     res.status(201).json({
@@ -47,7 +36,6 @@ export const register = async (req, res) => {
         ...user.toObject(),
         tokens: {
           accessToken: user.tokens.accessToken,
-          
         },
       },
     });
@@ -73,9 +61,8 @@ export const login = async (req, res) => {
     }
 
     const accessToken = generateAccessToken(user);
-    
 
-    user.tokens = { accessToken};
+    user.tokens = { accessToken };
     await user.save();
 
     const userResponse = {
@@ -86,67 +73,13 @@ export const login = async (req, res) => {
       role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      tokens: { accessToken},
+      tokens: { accessToken },
     };
 
     res.json({ user: userResponse });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
-};
-
-export const refreshTokens = async (req, res) => {
-  const { refreshToken } = req.body;
-
-  if (!refreshToken) {
-    return res.status(403).json({ message: "Refresh token is required" });
-  }
-
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const user = await User.findOne({
-      _id: decoded._id,
-      "tokens.refreshToken": refreshToken,
-    });
-
-    if (!user) {
-      return res.status(403).json({ message: "Invalid refresh token" });
-    }
-
-    const newAccessToken = generateAccessToken(user);
-    
-    user.tokens = {
-      accessToken: newAccessToken,
-      
-    };
-    await user.save();
-
-    res
-      .status(200)
-      .json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
-  } catch (error) {
-    res
-      .status(403)
-      .json({ message: "Invalid refresh token", error: error.message });
-  }
-};
-
-export const getProfile = async (req, res) => {
-  res.json(req.user);
-};
-
-export const isAdmin = (req, res, next) => {
-  if (req.user.role !== "Admin") {
-    return res.status(403).json({ message: "Access denied" });
-  }
-  next();
-};
-
-export const isInstructor = (req, res, next) => {
-  if (req.user.role !== "instructor") {
-    return res.status(403).json({ message: "Access denied" });
-  }
-  next();
 };
 
 // CRUD Operations
@@ -178,24 +111,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
-  const userId = req.params.id;
-  const updates = req.body;
 
-  try {
-    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json({ message: "User updated successfully", user });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to update user", error: error.message });
-  }
-};
 
 export const deleteUser = async (req, res) => {
   const userId = req.params.id;
@@ -214,3 +130,29 @@ export const deleteUser = async (req, res) => {
       .json({ message: "Failed to delete user", error: error.message });
   }
 };
+
+
+export const updateUser = async (req, res) => {
+  const userId = req.params.id;
+  const updates = req.body;
+
+  try {
+    // Check if a file is uploaded
+    if (req.file) {
+      const imagePath = req.file.path;
+      if (!updates.images) updates.images = [];
+      updates.images.push(imagePath);
+    }
+
+    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User updated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update user", error: error.message });
+  }
+};
+

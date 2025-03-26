@@ -6,7 +6,8 @@ import {
   updateProject,
   deleteProject,
 updateApprovalStatus,rejectProject,
-  getAllProjectsUser
+  getAllProjectsUser,
+  getProjectsByUserId 
 } from "../controllers/projectController.js";
 import configureMulter from "../utils/multer.js";
 import {filterApprovedProjects} from "../middlewares/adminApprove.js";
@@ -22,5 +23,6 @@ projectRouter.delete("/deleteProject/:id", deleteProject);
 projectRouter.get("/ApprovedProjects",filterApprovedProjects,getAllProjectsUser)
 projectRouter.put("/updateApprovalStatus",updateApprovalStatus)
 projectRouter.put('/rejectProject', rejectProject);
+projectRouter.put('/userProjects/:userId', getProjectsByUserId);
 
 export default projectRouter;
