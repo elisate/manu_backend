@@ -1,10 +1,8 @@
 import express from "express";
 import Donation from "../models/DonationModel.js";
 import sendEmail from "../utils/sendMailer.js";
-import User from "../models/userModel.js";
+
 import mongoose from "mongoose";
-
-
 // Create a Donation (User may or may not be logged in)
 export const createDonation = async (req, res) => {
   try {
