@@ -32,7 +32,7 @@ const projectSchema = mongoose.Schema(
     },
     category: {
       type: String,
-      required: true,
+      required: false
     },
     itemCondition: {
       type: String,
