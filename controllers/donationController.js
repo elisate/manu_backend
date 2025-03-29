@@ -99,4 +99,17 @@ export const getDonationsByUserId = async (req, res) => {
   }
 };
 
+export const getAllDonations = async (req, res) => {
+  try {
+    const donations = await Donation.find()
+      .populate("userId", "firstname lastname email") // Populate donor's name and email
+      .populate("ProjectId", "title") // Populate project name
+      .select("AmountDonated Comment PhoneNum donorEmail status donorItem"); // Include donor item field
+
+    res.status(200).json(donations);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching donations", error: error.message });
+  }
+};
+
 
