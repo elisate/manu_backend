@@ -30,6 +30,11 @@ ProjectId: {
     ref: "Project",  // Reference to the User model
     required: false,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",  // Reference to the User model
+    required: false,
+  },
 status: {
   type: String,
   enum: ["Pending", "Approved", "Failed"], 

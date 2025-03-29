@@ -2,7 +2,7 @@ import express from "express";
 import Donation from "../models/DonationModel.js";
 import sendEmail from "../utils/sendMailer.js";
 import User from "../models/userModel.js";
-
+import mongoose from "mongoose";
 
 
 // Create a Donation (User may or may not be logged in)
@@ -60,4 +60,43 @@ export const createDonation = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
-export default createDonation;
+
+export const ProjectById= async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    if (!projectId) {
+      return res.status(400).json({ message: "Project ID is required" });
+    }
+
+    const donations = await Donation.find({ ProjectId: projectId }).populate("userId", "email");
+    
+    res.status(200).json(donations);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching donations", error: error.message });
+  }
+};
+
+
+
+
+export const getDonationsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate if the userId is a valid MongoDB ObjectId format (24-character hex string)
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid User ID format" });
+    }
+
+    // Convert the string userId to ObjectId
+    const donations = await Donation.find({ userId: new mongoose.Types.ObjectId(userId) })
+      .populate("ProjectId", "projectName"); // Adjust based on your project schema
+
+    res.status(200).json(donations);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user donations", error: error.message });
+  }
+};
+
+

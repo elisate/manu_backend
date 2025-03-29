@@ -7,58 +7,52 @@ const projectSchema = mongoose.Schema(
       required: true,
     },
     images: {
-      type:Array,
+      type: Array,
       required: true,
     },
     description: {
       type: String,
       required: true,
-    },  
-    beneficiary:{
-      type:String,
-      required:false
     },
-    posterName:{
-        type:String,
-        required:true
+    beneficiary: {
+      type: String,
+      required: false,
     },
-    location:{
-        type:String,
-        required:true   
+    posterName: {
+      type: String,
+      required: true,
     },
-    contact:{
-        type:String,
-        required:true
+    location: {
+      type: String,
+      required: true,
     },
-    category:{
-        type:String,
-        required:true
+    contact: {
+      type: String,
+      required: true,
     },
-    itemCondition:{
-      type:String,
-      required:true
-  },
-  beneficiary:{
-    type:String,
-    required:false
-},
-userId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User",  // Reference to the User model
-  required: false,
-},
-approvalStatus: {
-  type: String,
-  enum: ["Pending", "Approved", "Rejected"], // Ensure these are valid statuses
+    category: {
+      type: String,
+      required: true,
+    },
+    itemCondition: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",  // Reference to the User model
+      required: false,
+    },
+    approvalStatus: {
+      type: String,
+      enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
-},
-
+    },
   },
-  
   {
     timestamps: true,
   }
 );
 
-const   Project = mongoose.model("project", projectSchema);
+const Project = mongoose.model("Project", projectSchema);
 export default Project;
