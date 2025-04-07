@@ -35,6 +35,10 @@ ProjectId: {
     ref: "User",  // Reference to the User model
     required: false,
   },
+  DonorName: {
+    type: String,
+    required: false, // or true if you want to enforce it
+  },
 status: {
   type: String,
   enum: ["Pending", "Approved", "Failed"], 

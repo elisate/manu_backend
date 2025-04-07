@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 // Create a Donation (User may or may not be logged in)
 export const createDonation = async (req, res) => {
   try {
-    const { AmountDonated, Comment, PhoneNum, donorEmail, ProjectId } = req.body;
+    const { AmountDonated, Comment, PhoneNum, donorEmail, ProjectId,DonorName} = req.body;
 
     // Validate required fields
     if (!AmountDonated || !Comment || !PhoneNum || !ProjectId) {
@@ -28,6 +28,7 @@ export const createDonation = async (req, res) => {
       donorEmail,
       userId,
       ProjectId,
+      DonorName,
       status: "Pending",
     });
 
@@ -37,15 +38,24 @@ export const createDonation = async (req, res) => {
     if (donorEmail) {
       const subject = "Thank You for Your Donation!";
       const htmlContent = `
-        <h2>Dear Donor,</h2>
-        <p>Thank you for your generous donation of <strong>$${AmountDonated}</strong> to our project.</p>
-        <p><strong>Comment:</strong> ${Comment}</p>
-        <p>Your support means a lot to us!</p>
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #234198;">Dear ${DonorName},</h2>
+        <p>Thank you for your generous donation of 
+          <strong style="color: #234198;">${AmountDonated}Rwf</strong> to our project.</p>
+    
+        <p><strong >Your donation is currently pending</strong> 
+        and will be confirmed after  paying ${AmountDonated} to the number below:</p>
+    
+        <p><strong>Phone number: 0780416453</strong></p>
+    
+        <p>Your support means a lot to us and is helping make a difference!</p>
+    
         <br>
         <p>Best regards,</p>
-        <p>The Project Team</p>
-      `;
-
+        <p style="color: #234198;"><strong>Manu Ltd Team</strong></p>
+      </div>
+    `;
+    
       const emailSent = await sendEmail(donorEmail, subject, htmlContent);
       if (!emailSent) {
         console.log("Failed to send donor email.");
