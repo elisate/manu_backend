@@ -122,31 +122,39 @@ export const getAllDonations = async (req, res) => {
 
 
 // Get a single donation by ID
+
 export const getDonationById = async (req, res) => {
   try {
+    // Extract donationId from the request parameters
     const { donationId } = req.params;
 
+    // Check if donationId is provided
     if (!donationId) {
       return res.status(400).json({ message: "Donation ID is required" });
     }
 
+    // Validate if the donationId is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(donationId)) {
       return res.status(400).json({ message: "Invalid Donation ID format" });
     }
 
-    const donation = await Donation.findById(donationId)
-      .populate("userId", "firstname lastname email")
-      .populate("ProjectId", "title description");
+    // Find the donation by donationId without populating
+    const donation = await Donation.findById(donationId);
 
+    // If donation not found
     if (!donation) {
       return res.status(404).json({ message: "Donation not found" });
     }
 
+    // If everything is fine, return the donation details
     res.status(200).json(donation);
   } catch (error) {
+    // Handle errors
+    console.error("Error fetching donation: ", error.message);
     res.status(500).json({ message: "Error fetching donation", error: error.message });
   }
 };
+
 
 // Update Donation approval status by admin
 export const UpdateDonationApprovalStatus = async (req, res) => {
