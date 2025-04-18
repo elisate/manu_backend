@@ -121,3 +121,37 @@ export const getAllDonations = async (req, res) => {
 };
 
 
+// Update Donation approval status by admin
+export const UpdateDonationApprovalStatus = async (req, res) => {
+  const { id, approvalStatus } = req.body; // Make sure you are passing `approvalStatus`
+
+  // Log incoming request body for debugging
+  console.log('Incoming request:', req.body);
+
+  try {
+    // Find the project by ID and update its approval status
+    const donation = await Donation.findByIdAndUpdate(
+      id,
+      { approvalStatus: approvalStatus }, // Ensure the correct field is updated
+      { new: true } // Return the updated document
+    );
+
+    // If the project is not found, return an error
+    if (!donation) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    // Log the updated project for debugging
+    console.log('Updated project:', project);
+
+    // Respond with the updated project details
+    res.status(200).json({
+      message: "Project approval status updated successfully",
+      donation,
+    });
+  } catch (error) {
+    // Log error for debugging
+    console.error('Error updating project approval status:', error);
+    res.status(500).json({ message: "Error updating approval status" });
+  }
+};
