@@ -6,6 +6,7 @@ const donateRouter=express();
 donateRouter.post("/createDonation",Auth,createDonation)
 donateRouter.get("/donations/:userId",getDonationsByUserId);
 donateRouter.get("/getAllDonation",getAllDonations);
+donateRouter.get("/getDonationsByUserId",getDonationsByUserId)
 donateRouter.put("/UpdateDonationApprovalStatus", UpdateDonationApprovalStatus);
 
 
