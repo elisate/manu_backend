@@ -4,11 +4,11 @@ const projectSchema = mongoose.Schema(
   {
     AmountDonated: {
       type: String,
-      required: true,
+      required: false,
     },
     Comment: {
       type: String,
-      required: true,
+      required: false,
     },  
     PhoneNum:{
         type:String,
